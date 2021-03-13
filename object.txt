@@ -1,0 +1,118 @@
+Object类：
+    跟线程相关：notify/notifyAll wait*3
+    getClass()：获得类的字节码对象
+        类加载：
+            使用类的情况：
+                new 对象 -> 实例化
+                调用静态变量/静态方法
+                调用子类之前，必须先加载父类
+                xx.class
+clone()：
+    深克隆：复制对象
+    浅克隆：复制引用
+
+finalize()：
+    GC - 垃圾回收机制
+
+    内存泄漏：100%
+    内存溢出：100% 实际使用内存 50%
+
+toString()：将对象以字符串的形式输出
+    默认实现：
+        getClass().getName() + "@" + Integer.toHexString(hashCode())
+        @前：表示的是完整的类名
+        @后：表示16进制的hashCode值
+    如果想要自定义格式输出，那么就重写toString()
+
+equals()
+    作用：判断两个对象[this 和 obj]是否相等
+    Object中默认实现方式：
+        this == obj -> 判断两个地址值是否相等
+    方法重写：
+        目的：自定义比较规则
+            步骤：
+                1.判断是不是为同一对象
+                2.判断是不是同一类型
+                3.既不是同一对象也不是同一类型，则直接返回false
+hashCode()
+作用：生成对象的hash值
+    跟内存中的存储位置相关
+public native int hashCode();
+hashCode() 不是抽象方法，但是也没有方法体，是因为它是本地方法，这是跟底层相关的方法
+    底层是由C实现的
+public native int hashCode();
+native:本地的
+    Java Native Interface
+
+———————————————————————————————————————————————————
+java.lang -> String 包装类 线程
+java,util -> 工具类 Arrays Collection Map
+java.io -> Input Output
+java.text -> 格式化 DateFormat
+java.net -> 网络编程 协议 TCP/IP
+
+java.sql -> 数据库
+
+———————————————————————————————————————————————————
+
+跟时间相关的类：
+    long类型：
+        a.获得当前系统时间
+            long System.currentTimeMills()
+        b.作用：
+            通常用来做计算，计算效率（7天以内的计算）
+        c.注意：
+            1.在进行计算时，需要注意整数类型的默认值时int类型
+                如果超出了int类型的范围，就是溢出了，则会变成负数，所以需要在计算之前先标记好是long类型，加L/l
+     Date类：
+        a.作用：
+            专门用来做时间的显示
+        b.创建 - 构造方法
+            1) 得到当前系统时间
+                new Date()
+            2) 得到long类型的时间
+                new Date(long)
+        c.常用API
+            date1.after(date2)
+            date1.before(date2)
+
+            通过Date获得long(Date -> long)
+              date.getTime()
+            使用long类型的时间做计算，然后输出
+            Date类型(long -> Date)
+            date.setTime()
+     Calendar - 万年历
+        a.作用： 专门用来做时间推算或者是时间跳转
+        b.特点： 是abstract修饰的类，是一个抽象类，所以不能直接new对象，只能创建子类或者调用类的静态方法
+        c.创建：
+            Calendar.getInstance()
+        d.常用API
+            get() - 获取时间
+            set() - 时间的跳转
+            add() - 时间的推算
+
+            Calendar 和 Date 之间的转换
+                Calendar -> Date：
+                    Date getTime()
+                Date -> Calendar:
+                    void setTime()
+
+            Calendar 和 long 之间的转换
+                getTimeInMillis()
+                setTimeInMillis()
+
+            Date 和 long 之间的转换
+                getTime()
+                setTime()
+————————————————————————————————————————
+java.text - 格式化
+
+DateFormat
+    常用API
+        a.使用指定格式将时间格式化(date -> String)
+            String format(date)
+        b.将字符串转变成时间(String -> date)
+            Date parse("String")
+        c.注意：
+            要求必须符合SimpleDateFormat的格式
+            否则就会出现
