@@ -1,21 +1,54 @@
+API(application progamming Interface):应用程序接口
+api -> 帮助文档
+
+String java.lang.String
+Math java.lang.Math
+Scanner
+System
+
 Object类：
-    跟线程相关：notify/notifyAll wait*3
-    getClass()：获得类的字节码对象
-        类加载：
-            使用类的情况：
-                new 对象 -> 实例化
-                调用静态变量/静态方法
-                调用子类之前，必须先加载父类
-                xx.class
-clone()：
-    深克隆：复制对象
-    浅克隆：复制引用
+    1.是所有类的基类/父类,所以类都默认继承Object
+    	2.11方法
+    		1)Class getClass()
+    			(1)作用: 对象通过该方法,可以获得对象对应的类的字节码对象
+    				xx.java -> xx.class -> JVM
+    				类加载 - 方法区 - 字节码对象
+    					加载:类只加载一次,所以方法区中类信息只有一个,所以字节码对象也只有一个
+
+    					加载的触发条件(使用类) - 工具:类加载器(ClassLoader)
+    						I: 实例化对象 new
+    						II: 静态方法/静态变量
+    						III:使用子类,父类必须先加载
+    						IV: Class.forName("java.lang.String") --手动加载指定的类
+    						V: String.class -> 获得类的字节码对象
+
+    			(2)notify/notifyAll/wait * 3  -> 跟线程相关,先不学
+Object clone() - 克隆
+			(1)对象的克隆方式(图解)
+				深克隆:复制对象
+					是复制一份全新的,属性内容一致的对象,但是内存中的地址值一定不一样
+				浅克隆:复制引用
+
+			(2)调用
+				clone调用时 -> not visible(不可见)
+					要求: clone的对象必须标记是可克隆的,因为他是protected修饰的,只能在子类中可见,所以要进行重写
+
+			(3)一般不会重写clone方法
+				I:因为clone方法不常用到
+				II: 可以直接使用 - 引用复制
+				III: 如果要重写clone方法,直接调用,则要实现Cloneable接口,否则会抛出CloneNotSupportedExecption
+					Cloneable是一个空接口.目的只有一个就是为了标记是 可克隆的
 
 finalize()：
-    GC - 垃圾回收机制
+    GC - 垃圾回收机制,定时清理内存
+        I: 在程序运行时是开始启动,不定时回收内存中标记的垃圾,没有引用的对象,会被内存标记为垃圾
+        II: GC是自动调用的,也可以手动调用GC - Sytem.gc();
 
-    内存泄漏：100%
-    内存溢出：100% 实际使用内存 50%
+    内存泄漏：100% 内存被无效对象占用
+        一个对象分配内存之后,在使用结束时没有来得及释放,导致一直在占用内存,使得实际可用内存减少
+    内存溢出：100% 实际使用内存 50% 在内存中没有存储的地方
+
+    总结: 原则上,Java中是不存在内存泄漏的
 
 toString()：将对象以字符串的形式输出
     默认实现：
@@ -107,7 +140,7 @@ java.sql -> 数据库
 ————————————————————————————————————————
 java.text - 格式化
 
-DateFormat
+SimpleDateFormat
     常用API
         a.使用指定格式将时间格式化(date -> String)
             String format(date)
@@ -115,4 +148,4 @@ DateFormat
             Date parse("String")
         c.注意：
             要求必须符合SimpleDateFormat的格式
-            否则就会出现
+            否则就会出现ParseException
